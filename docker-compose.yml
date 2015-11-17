@@ -1,0 +1,32 @@
+elasticsearch:
+  hostname: elasticsearch
+  image: amitpatel/elasticsearch
+  ports:
+    - "9200:9200"
+    - "9300:9300"
+logstash:
+  hostname: logstash
+  image: amitpatel/logstash
+  ports:
+    - "5000:5000"
+  links:
+    - elasticsearch
+kibana:
+  hostname: kibana
+  image: amitpatel/kibana
+  volumes:
+    - ./kibana/config:/etc/kibana/config
+  ports:
+    - "5601:5601"
+  links:
+    - elasticsearch
+nginx:
+  hostname: nginx
+  image: amitpatel/nginx
+  ports:
+    - "80:80"
+    - "443:443"
+  volumes:
+    - nginx/assets/default.conf /etc/nginx/conf.d/default.conf
+  links:
+    - kibana
